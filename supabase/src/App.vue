@@ -24,6 +24,8 @@ onMounted(async () => {
 })
 
 
+const instgram = activate
+
 
 
 
