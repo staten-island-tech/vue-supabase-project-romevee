@@ -2,63 +2,98 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from './supabase'
 
-const transactions = ref([])
-const error = ref(null)
-const loading = ref(true)
+const caption = ref('')
+const image_url = ref('')
+const posts = ref([])
 
-onMounted(async () => {
-  let { data, error: err } = await supabase
-    .from('transactions')
-    .select('*')
-    .order('id', { ascending: false })
+async function addPost() {
+  const { error } = await supabase
+    .from('posting1')
+    .insert([
+      {
+        caption: caption.value,
+        image_url: image_url.value,
+      },
+    ])
 
-  if (err) {
-    error.value = err.message
+  if (error) {
+    console.log(error)
   } else {
-    transactions.value = data
+    alert('Post added!')
+    getPosts()
   }
+}
 
-  loading.value = false
+async function getPosts() {
+  const { data, error } = await supabase
+    .from('posting1')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.log(error)
+  } else {
+    posts.value = data
+  }
+}
+
+onMounted(() => {
+  getPosts()
 })
 </script>
+
 <template>
-  <div class="app">
+  <div class="container">
+    <h1>Instagram Clone Test</h1>
 
-    <h1>Instagram Clone</h1>
+    <input
+      v-model="caption"
+      placeholder="Enter caption"
+    />
 
-    <p v-if="loading">
-      Loading posts...
-    </p>
+    <input
+      v-model="image_url"
+      placeholder="Paste image URL"
+    />
 
-    <p v-if="error">
-      {{ error }}
-    </p>
+    <button @click="addPost">
+      Add Post
+    </button>
 
     <div
-      v-for="transaction in transactions"
-      :key="transaction.id"
-      class="post-card"
+      v-for="post in posts"
+      :key="post.id"
+      class="post"
     >
+      <h3>{{ post.caption }}</h3>
+
       <img
-        :src="transaction.image_url"
-        class="post-image"
+        :src="post.image_url"
+        width="300"
       />
-
-      <div class="post-content">
-        <h3>@{{ transaction.username }}</h3>
-
-        <p>
-          {{ transaction.caption }}
-        </p>
-
-        <button>
-          ❤️ Like
-        </button>
-      </div>
     </div>
-
   </div>
 </template>
-<style lang="scss" scoped>
 
+<style scoped>
+.container {
+  padding: 20px;
+  font-family: Arial;
+}
+
+input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 300px;
+}
+
+button {
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.post {
+  margin-top: 20px;
+}
 </style>
