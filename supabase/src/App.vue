@@ -46,7 +46,7 @@ onMounted(async () => {
 
       <div class="post-content">
         <h3>@{{ transaction.username }}</h3>
-
+        
         <p>
           {{ transaction.caption }}
         </p>
