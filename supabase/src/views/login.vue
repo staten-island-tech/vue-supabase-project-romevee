@@ -1,4 +1,5 @@
-<template>
+Here's the updated login.vue with the two buttons added:
+vue<template>
   <div class="login-container">
     <h1>Login</h1>
     <form @submit.prevent="login(user)">
@@ -15,6 +16,10 @@
     </form>
     <h2 v-if="loggedIn">Welcome {{ user.username }}</h2>
     <h2 v-else>Please Login</h2>
+    <div class="nav-buttons">
+      <button class="home-btn" @click="router.push('/')">Home</button>
+      <button class="signup-btn" @click="router.push('/signup')">Sign Up</button>
+    </div>
   </div>
 </template>
 
@@ -29,7 +34,6 @@ const loggedIn = ref(false)
 const errorMsg = ref('')
 
 async function login(user) {
-  // Step 1: look up the email from profiles table using username
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('email')
@@ -41,7 +45,6 @@ async function login(user) {
     return
   }
 
-  // Step 2: sign in with the email + password
   const { data, error } = await supabase.auth.signInWithPassword({
     email: profile.email,
     password: user.password,
@@ -107,5 +110,27 @@ button {
   color: red;
   margin-top: 1rem;
   text-align: center;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+
+  .home-btn {
+    background-color: #555;
+
+    &:hover {
+      background-color: #333;
+    }
+  }
+
+  .signup-btn {
+    background-color: #2196F3;
+
+    &:hover {
+      background-color: #1976D2;
+    }
+  }
 }
 </style>
