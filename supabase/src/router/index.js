@@ -8,20 +8,20 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: '',
+      name: 'home', 
       component: home
     },
     {
-  path: '/signup',
-  name: 'signup',
-  component: signup
-   },
+      path: '/signup',
+      name: 'signup',
+      component: signup
+    },
     {
       path: '/login',
       name: 'login',
       component: login
     }
-  ],
+  ]
 })
 
 export default router

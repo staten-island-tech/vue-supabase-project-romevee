@@ -1,5 +1,4 @@
-Here's the updated login.vue with the two buttons added:
-vue<template>
+<template>
   <div class="login-container">
     <h1>Login</h1>
     <form @submit.prevent="login(user)">

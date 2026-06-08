@@ -33,7 +33,6 @@ const errorMsg = ref('')
 const successMsg = ref('')
 
 async function signup() {
-  // Step 1: create the auth user
   const { data, error } = await supabase.auth.signUp({
     email: form.email,
     password: form.password,
@@ -43,8 +42,6 @@ async function signup() {
     errorMsg.value = error.message
     return
   }
-
-  // Step 2: insert username into profiles table
   const { error: profileError } = await supabase
     .from('profiles')
     .insert([{ id: data.user.id, username: form.username, email: form.email }])
