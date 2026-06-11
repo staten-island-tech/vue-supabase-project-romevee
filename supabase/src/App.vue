@@ -2,20 +2,20 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from './supabase'
 
-const transactions = ref([])
+const users = ref([])
 const error = ref(null)
 const loading = ref(true)
 
 onMounted(async () => {
   let { data, error: err } = await supabase
-    .from('transactions')
+    .from('users')
     .select('*')
     .order('id', { ascending: false })
 
   if (err) {
     error.value = err.message
   } else {
-    transactions.value = data
+    users.value = data
   }
 
   loading.value = false
@@ -35,20 +35,20 @@ onMounted(async () => {
     </p>
 
     <div
-      v-for="transaction in transactions"
-      :key="transaction.id"
+      v-for="user in users"
+      :key="user.id"
       class="post-card"
     >
       <img
-        :src="transaction.image_url"
+        :src="user.image_url"
         class="post-image"
       />
 
       <div class="post-content">
-        <h3>@{{ transaction.username }}</h3>
+        <h3>@{{ user.username }}</h3>
         
         <p>
-          {{ transaction.caption }}
+          {{ user.caption }}
         </p>
 
         <button>
@@ -58,6 +58,7 @@ onMounted(async () => {
     </div>
 
   </div>
+  <router-view></router-view>
 </template>
 <style lang="scss" scoped>
 
