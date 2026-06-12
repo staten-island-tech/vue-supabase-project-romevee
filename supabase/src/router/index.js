@@ -2,9 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/home.vue'
 import Login from '../views/login.vue'
 import Signup from '../views/signup.vue'
-
-// 1. Correct the path to point to the src folder, not views
-import UploadDashboard from '../App.vue' 
+import UploadDashboard from '../views/upload.vue' 
 
 const routes = [
   {
@@ -25,7 +23,6 @@ const routes = [
   {
     path: '/upload',
     name: 'Upload',
-    // 2. Use the exact variable name you imported above
     component: UploadDashboard, 
     meta: { requiresAuth: true }
   }
