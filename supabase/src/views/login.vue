@@ -171,20 +171,25 @@ const loggedIn = ref(false)
 const errorMsg = ref('')
 
 async function login(user) {
-  // Changed '.from('profiles')' to '.from('users')' to look up the username correctly
+  // Clear any old error messages when trying again
+  errorMsg.value = ''
+
+  // 1. Look up the row where 'username' matches what the user typed in
   const { data: profile, error: profileError } = await supabase
     .from('users')
-    .select('email')
+    .select('username')
     .eq('username', user.username)
     .single()
 
+  // If Supabase returns an error or no rows match, stop here
   if (profileError || !profile) {
     errorMsg.value = 'Username not found'
     return
   }
 
+  // 2. Log in using the username string (which is their email address in your table)
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: profile.email,
+    email: profile.username,
     password: user.password,
   })
 
@@ -192,6 +197,7 @@ async function login(user) {
     errorMsg.value = error.message
   } else {
     loggedIn.value = true
+    // 3. Directly redirect them to the upload page on success
     router.push('/upload')
   }
 }
